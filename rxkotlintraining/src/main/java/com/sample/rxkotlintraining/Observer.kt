@@ -53,7 +53,7 @@ fun main() {
     observableOnList.subscribe(observer)*/
 
     // Observable.create 의 이해
-    val observer: Observer<String> = object : Observer<String> {
+    val observer: Observer<Any> = object : Observer<Any> {
         override fun onComplete() {
             println("onComplete")
         }
@@ -62,7 +62,7 @@ fun main() {
             println("onSubscribe")
         }
 
-        override fun onNext(t: String) {
+        override fun onNext(t: Any) {
             println("onNext $t")
         }
 
@@ -85,7 +85,7 @@ fun main() {
     명시돼 있음. 다른 스레드에서 이런 알림이 발행할 수 있지만 공식적으로 알림 간에는 전후 관계가
     있다. */
 
-    // Iterable
+    /*// Iterable
     val list = listOf("String1","String2","String3","String4")
     val observableFromIterable: Observable<String> = Observable.fromIterable(list)
     observableFromIterable.subscribe(observer)
@@ -97,5 +97,13 @@ fun main() {
         }
     }
     val observableFromCallable:Observable<String> = Observable.fromCallable(callable)
-    observableFromCallable.subscribe(observer)
+    observableFromCallable.subscribe(observer)*/
+
+    // Observable.just
+    Observable.just("A String").subscribe(observer)
+    Observable.just(54).subscribe(observer)
+    Observable.just(
+            listOf("String 1","String 2",3,true)
+    ).subscribe(observer)
+    Observable.just(1,2,3).subscribe(observer)
 }
