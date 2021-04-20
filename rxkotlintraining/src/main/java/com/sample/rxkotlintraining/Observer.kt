@@ -1,5 +1,10 @@
 package com.sample.rxkotlintraining
 
+import io.reactivex.Observable
+import io.reactivex.Observer
+import io.reactivex.disposables.Disposable
+import java.lang.Exception
+
 
 fun main() {
     /* 테스트용
@@ -45,4 +50,37 @@ fun main() {
             listOf("List with Single Item"),
             listOf(1,2,3,4,5,6))
     observableOnList.subscribe(observer)*/
+
+    // Observable.create 의 이해
+    val observer: Observer<String> = object : Observer<String> {
+        override fun onComplete() {
+            println("onComplete")
+        }
+
+        override fun onSubscribe(d: Disposable) {
+            println("onSubscribe")
+        }
+
+        override fun onNext(t: String) {
+            println("onNext $t")
+        }
+
+        override fun onError(e: Throwable) {
+            println("onError ${e.message}")
+        }
+    }
+
+    val observable:Observable<String> = Observable.create<String> {
+        it.onNext("Emit 1")
+        it.onNext("Emit 2")
+        it.onNext("Emit 3")
+        it.onError(Exception("Custom Exception"))
+        it.onNext("Emit 4")
+        it.onComplete()
+    }
+
+    observable.subscribe(observer)
+    /*Observable 계약에는 Obsevable이 observers에게 연속적으로 (병렬이 아닌)알림을 보내야함이
+    명시돼 있음. 다른 스레드에서 이런 알림이 발행할 수 있지만 공식적으로 알림 간에는 전후 관계가
+    있다. */
 }
