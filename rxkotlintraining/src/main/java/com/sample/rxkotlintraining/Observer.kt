@@ -4,6 +4,7 @@ import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
 import java.lang.Exception
+import java.util.concurrent.Callable
 
 
 fun main() {
@@ -70,7 +71,7 @@ fun main() {
         }
     }
 
-    val observable:Observable<String> = Observable.create<String> {
+    /*val observable:Observable<String> = Observable.create<String> {
         it.onNext("Emit 1")
         it.onNext("Emit 2")
         it.onNext("Emit 3")
@@ -79,8 +80,22 @@ fun main() {
         it.onComplete()
     }
 
-    observable.subscribe(observer)
+    observable.subscribe(observer)*/
     /*Observable 계약에는 Obsevable이 observers에게 연속적으로 (병렬이 아닌)알림을 보내야함이
     명시돼 있음. 다른 스레드에서 이런 알림이 발행할 수 있지만 공식적으로 알림 간에는 전후 관계가
     있다. */
+
+    // Iterable
+    val list = listOf("String1","String2","String3","String4")
+    val observableFromIterable: Observable<String> = Observable.fromIterable(list)
+    observableFromIterable.subscribe(observer)
+
+    // Callable
+    val callable = object : Callable<String> {
+        override fun call(): String {
+            return "From Callable"
+        }
+    }
+    val observableFromCallable:Observable<String> = Observable.fromCallable(callable)
+    observableFromCallable.subscribe(observer)
 }
