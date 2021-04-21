@@ -5,6 +5,7 @@ import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
 import java.lang.Exception
 import java.util.concurrent.Callable
+import java.util.concurrent.TimeUnit
 
 
 fun main() {
@@ -52,7 +53,7 @@ fun main() {
             listOf(1,2,3,4,5,6))
     observableOnList.subscribe(observer)*/
 
-    // Observable.create 의 이해
+
     val observer: Observer<Any> = object : Observer<Any> {
         override fun onComplete() {
             println("onComplete")
@@ -71,7 +72,8 @@ fun main() {
         }
     }
 
-    /*val observable:Observable<String> = Observable.create<String> {
+    /* Observable.create 의 이해
+    val observable:Observable<String> = Observable.create<String> {
         it.onNext("Emit 1")
         it.onNext("Emit 2")
         it.onNext("Emit 3")
@@ -99,11 +101,29 @@ fun main() {
     val observableFromCallable:Observable<String> = Observable.fromCallable(callable)
     observableFromCallable.subscribe(observer)*/
 
-    // Observable.just
-    Observable.just("A String").subscribe(observer)
+    /* Observable.just
+    just는 리스트나 맵도 단일 아이템으로 취급.
+    아이템(인자)를 여럿 입력하면 별개의 아이템으로 취급
+     */
+    /*Observable.just("A String").subscribe(observer)
     Observable.just(54).subscribe(observer)
     Observable.just(
             listOf("String 1","String 2",3,true)
     ).subscribe(observer)
-    Observable.just(1,2,3).subscribe(observer)
+    Observable.just(1,2,3).subscribe(observer)*/
+
+    /* observable의 여러 factory method
+    todo factory method : observable 객체를 생성하는 성격의 메서드들?
+     */
+    Observable.range(1,10).subscribe(observer)
+    Observable.empty<String>().subscribe(observer)
+
+    // 구독 취소나, 프로그램 종료까지 정해진 간격만큼 0부터 출력
+    Observable.interval(300,TimeUnit.MILLISECONDS).subscribe(observer)
+    Thread.sleep(900)
+
+    // 구독 취소나, 프로그램 종료까지 정해진 시간 경과 후 한 번만 출력
+    Observable.timer(400,TimeUnit.MICROSECONDS).subscribe(observer)
+    Thread.sleep(1000)
+
 }
