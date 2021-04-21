@@ -1,4 +1,4 @@
-package com.sample.rxkotlintraining
+package com.sample.rxkotlintraining.`3`
 
 import io.reactivex.Observable
 import io.reactivex.Observer
