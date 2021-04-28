@@ -4,6 +4,7 @@ import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.toObservable
+import io.reactivex.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 
 fun main() {
@@ -48,7 +49,8 @@ fun main() {
     connectableObservable.subscribe({println("Subscription3: $it")})
     connectableObservable.connect()*/
 
-    var connectableObservable =
+    //HOT observable
+    /*var connectableObservable =
         Observable.interval(100, TimeUnit.MILLISECONDS).publish()
     val disposable = connectableObservable.subscribe({ println("Subscription1: $it") })
     connectableObservable.subscribe({ println("Subscription2: $it") })
@@ -62,5 +64,24 @@ fun main() {
         listOf(11L, 22L, 33L, 44L, 55L).toObservable().publish()
     connectableObservable.subscribe({ println("Subscription3: $it") })
     connectableObservable.connect()
-    Thread.sleep(500)
+    Thread.sleep(500)*/
+
+
+    /**
+     * subject의 기본 개념
+     * subject : cold observable과 같이 행봉을 반복하지 않음.
+     * subject는 모든 옵저버에게 전달된 배출을 중계.
+     * cold observable -> hot observable
+     */
+    val observable = Observable.interval(100,TimeUnit.MILLISECONDS)
+    val subject = PublishSubject.create<Long>()
+    observable.subscribe(subject)
+    subject.subscribe({
+        println("Subscription 1 Received $it")
+    })
+    Thread.sleep(1100)
+    subject.subscribe({
+        println("Subscription 2 Received $it")
+    })
+    Thread.sleep(1100)
 }
