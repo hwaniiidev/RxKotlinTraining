@@ -2,6 +2,7 @@ package com.sample.rxkotlintraining.`3`
 
 import io.reactivex.Observable
 import io.reactivex.subjects.AsyncSubject
+import io.reactivex.subjects.BehaviorSubject
 
 fun main() {
     /*// observer를 구독 중에 중단 시키기
@@ -85,7 +86,7 @@ fun main() {
      *  AsyncSubject : 대기 중인 소스의 마지막 값을 한 번만 배출
      *  AsyncSubject.onComplete에서 배출!
      */
-    val observable = Observable.just(1, 2, 3, 4)
+    /*val observable = Observable.just(1, 2, 3, 4)
     val subject = AsyncSubject.create<Int>()
     observable.subscribe(subject)
 
@@ -118,5 +119,30 @@ fun main() {
     }, {
         println("S2 Complete")
     })
-    subject2.onComplete()
+    subject2.onComplete()*/
+
+    /**
+     * BehaviorSubject : Publish,Async Subject 를 합친 개념
+     */
+    val subject = BehaviorSubject.create<Int>()
+    subject.onNext(1)
+    subject.onNext(2)
+    subject.onNext(3)
+    subject.subscribe({
+        println("S1 Received $it")
+    }, {
+        it.printStackTrace()
+    }, {
+        println("S1 Complete")
+    })
+
+    subject.onNext(4)
+    subject.subscribe({
+        println("S2 Received $it")
+    }, {
+        it.printStackTrace()
+    }, {
+        println("S2 Complete")
+    })
+    subject.onComplete()
 }
