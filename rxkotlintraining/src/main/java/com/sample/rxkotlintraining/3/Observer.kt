@@ -3,6 +3,7 @@ package com.sample.rxkotlintraining.`3`
 import io.reactivex.Observable
 import io.reactivex.subjects.AsyncSubject
 import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.ReplaySubject
 
 fun main() {
     /*// observer를 구독 중에 중단 시키기
@@ -124,7 +125,32 @@ fun main() {
     /**
      * BehaviorSubject : Publish,Async Subject 를 합친 개념
      */
-    val subject = BehaviorSubject.create<Int>()
+    /*val subject = BehaviorSubject.create<Int>()
+    subject.onNext(1)
+    subject.onNext(2)
+    subject.onNext(3)
+    subject.subscribe({
+        println("S1 Received $it")
+    }, {
+        it.printStackTrace()
+    }, {
+        println("S1 Complete")
+    })
+
+    subject.onNext(4)
+    subject.subscribe({
+        println("S2 Received $it")
+    }, {
+        it.printStackTrace()
+    }, {
+        println("S2 Complete")
+    })
+    subject.onComplete()*/
+
+    /**
+     * ReplaySubject : cold observable과 유사
+     */
+    val subject = ReplaySubject.create<Int>()
     subject.onNext(1)
     subject.onNext(2)
     subject.onNext(3)
