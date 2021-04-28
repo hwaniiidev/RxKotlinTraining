@@ -1,11 +1,7 @@
 package com.sample.rxkotlintraining.`3`
 
 import io.reactivex.Observable
-import io.reactivex.Observer
-import io.reactivex.disposables.Disposable
-import io.reactivex.rxkotlin.toObservable
-import io.reactivex.subjects.PublishSubject
-import java.util.concurrent.TimeUnit
+import io.reactivex.subjects.AsyncSubject
 
 fun main() {
     /*// observer를 구독 중에 중단 시키기
@@ -73,7 +69,7 @@ fun main() {
      * subject는 모든 옵저버에게 전달된 배출을 중계.
      * cold observable -> hot observable
      */
-    val observable = Observable.interval(100,TimeUnit.MILLISECONDS)
+    /*val observable = Observable.interval(100,TimeUnit.MILLISECONDS)
     val subject = PublishSubject.create<Long>()
     observable.subscribe(subject)
     subject.subscribe({
@@ -83,5 +79,44 @@ fun main() {
     subject.subscribe({
         println("Subscription 2 Received $it")
     })
-    Thread.sleep(1100)
+    Thread.sleep(1100)*/
+
+    /**
+     *  AsyncSubject : 대기 중인 소스의 마지막 값을 한 번만 배출
+     *  AsyncSubject.onComplete에서 배출!
+     */
+    val observable = Observable.just(1, 2, 3, 4)
+    val subject = AsyncSubject.create<Int>()
+    observable.subscribe(subject)
+
+    subject.subscribe({
+        println("Received $it")
+    }, {
+        it.printStackTrace()
+    }, {
+        println("Complete")
+    })
+
+    val subject2 = AsyncSubject.create<Int>()
+    subject2.onNext(1)
+    subject2.onNext(2)
+    subject2.onNext(3)
+    subject2.onNext(4)
+    subject2.subscribe({
+        println("S1 Received $it")
+    }, {
+        it.printStackTrace()
+    }, {
+        println("S1 Complete")
+    })
+
+    subject2.onNext(5)
+    subject2.subscribe({
+        println("S2 Received $it")
+    }, {
+        it.printStackTrace()
+    }, {
+        println("S2 Complete")
+    })
+    subject2.onComplete()
 }
